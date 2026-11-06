@@ -22,4 +22,11 @@ router.get('/top-termekek', async (req,res) => {
     return res.json(rows)
 })
 
+router.get('/kategoriak', async (req, res) => {
+    let sql = "SELECT t.kategoria as kategoria, SUM(te.db) as eladottDB, SUM(te.db*te.egysegar) as bevetel FROM termekek t LEFT JOIN tetelek te ON t.id = te.termek_id LEFT JOIN rendelesek r ON te.rendeles_id = r.id WHERE r.statusz != 'törölve' GROUP BY t.kategoria"
+
+    let [rows] = await pool.query(sql)
+    return res.json(rows)
+})
+
 export default router;
